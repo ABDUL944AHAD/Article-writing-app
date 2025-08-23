@@ -5,34 +5,34 @@ import './AllArticles.css';
 const sampleArticles = [
     {
         id: 1,
-        articleName: "Why JavaScript is Eating the World",
+        articleName: "Streetwear Meets Elegance: The 2025 Bold Prints Trend",
         authorName: "Sara Khan",
-        avatar: "/avatars/sara.jpg",
-        excerpt: "Explore the rise of JavaScript and how it’s shaping modern web development.",
-        category: "Programming"
+        avatar: "/avatars/ladki.png",
+        excerpt: "Oversized fits and bold prints are transforming streetwear into chic, everyday style.",
+        category: "Fashion"
     },
     {
         id: 2,
-        articleName: "The Future of Education in the AI Era",
+        articleName: "The Quantum Leap in Computing",
         authorName: "Ali Mirza",
-        avatar: "/avatars/ali.jpg",
-        excerpt: "How artificial intelligence is revolutionizing modern classrooms.",
-        category: "Education"
+        avatar: "/avatars/samar.png",
+        excerpt: "Quantum computers are moving from labs to real-world use, reshaping innovation.",
+        category: "Science"
     },
     {
         id: 3,
-        articleName: "Fintech Startups to Watch in 2025",
+        articleName: "Rising Digital Nomad Hotspots of 2025",
         authorName: "Nida Raza",
-        avatar: "/avatars/nida.jpg",
-        excerpt: "We review the most promising fintech players disrupting the industry.",
+        avatar: "/avatars/nida.png",
+        excerpt: "Remote workers are chasing sunsets in Bali, Lisbon, and Seoul while earning online and enjoying.",
         category: "Finance"
     },
     {
         id: 4,
         articleName: "SpaceX and the New Space Race",
         authorName: "Tariq Bilal",
-        avatar: "/avatars/tariq.jpg",
-        excerpt: "The renewed global interest in Mars missions and interstellar travel.",
+        avatar: "/avatars/kamran.png",
+        excerpt: "Interest in Mars missions and interstellar travel is surging, as new discoveries and innovations ",
         category: "Science"
     }
 ];
@@ -106,9 +106,24 @@ const AllArticles = () => {
         : combinedArticles.filter(article => article.category === selectedCategory);
 
 
+    const deleteArticle = async (id) => {
+        try {
+            // Call backend delete endpoint
+            await axios.delete(`http://localhost:3000/article/delete/${id}`);
+
+            // Remove it from frontend state
+            setArticles(prev => prev.filter(article => article._id !== id && article.id !== id));
+            console.log(`Article with ID ${id} deleted successfully!`);
+        } catch (error) {
+            console.error("Error deleting article:", error);
+        }
+    };
+
+
+
     return (
-        <div className="featured-articles">
-            <div className="featured-header">
+        <div className="all-articles" id='all-articles'>
+            <div className="articles-header">
                 <h2>All Articles</h2>
                 <p>Browse our latest insights, tutorials, and educational write-ups.</p>
 
@@ -149,9 +164,19 @@ const AllArticles = () => {
                 </div>
             </div>
 
-            <div className="featured-grid">
+            <div className="allarticles-grid">
                 {filteredArticles.length > 0 ? filteredArticles.map((article) => (
                     <div className="article-card" key={article._id || article.id}>
+
+                        {/* ✅ Show first image if available */}
+                        {article.images && article.images.length > 0 && (
+                            <img
+                                src={article.images[0]}
+                                alt={article.articleName}
+                                className="article-thumbnail"
+                            />
+                        )}
+
                         <div className="article-content">
                             <h3>{article.articleName}</h3>
                             <p>
@@ -168,9 +193,28 @@ const AllArticles = () => {
                                     />
                                 )}
                                 <span>{article.authorName}</span>
+                                {/* ✅ Only show delete button for backend articles */}
+                                {!showSamples && (
+                                    <button
+                                        onClick={() => deleteArticle(article._id || article.id)}
+                                        style={{
+                                            marginLeft: "auto",
+                                            backgroundColor: "#FF3B7F",
+                                            color: "#fff",
+                                            border: "none",
+                                            padding: "0.25rem 0.5rem",
+                                            borderRadius: "0.5rem",
+                                            cursor: "pointer",
+                                            fontSize: "0.8rem"
+                                        }}
+                                    >
+                                        Delete
+                                    </button>
+                                )}
                             </div>
                         </div>
                     </div>
+
                 )) : (
                     <p style={{ fontFamily: 'Playwrite AU QLD' }}>No articles found in this category.</p>
                 )}

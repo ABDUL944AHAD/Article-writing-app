@@ -7,7 +7,7 @@ import Placeholder from '@tiptap/extension-placeholder';
 
 import './Editor.css';
 
-const TiptapEditor = ({ onChange }) => {
+const TiptapEditor = ({ onChange, onImagesChange }) => {
     const editor = useEditor({
         extensions: [
             StarterKit,
@@ -15,12 +15,21 @@ const TiptapEditor = ({ onChange }) => {
             Placeholder.configure({
                 placeholder: 'Start writing your article...',
             }),
-            
         ],
         content: '',
         onUpdate: ({ editor }) => {
             const html = editor.getHTML();
-            onChange(html); // Send content to parent
+            onChange(html); // ✅ send full HTML/text to parent
+
+            // ✅ Extract all image URLs from content
+            const tempDiv = document.createElement("div");
+            tempDiv.innerHTML = html;
+            const imgTags = tempDiv.querySelectorAll("img");
+            const imageUrls = Array.from(imgTags).map(img => img.getAttribute("src"));
+
+            if (onImagesChange) {
+                onImagesChange(imageUrls); // ✅ send images separately to parent
+            }
         },
     });
 
@@ -59,9 +68,9 @@ const TiptapEditor = ({ onChange }) => {
                 <button type='button' onClick={addImage}>Add Image</button>
             </div>
 
-            <EditorContent editor={editor} className="editor-box"  placeholder='Start writing your article...'/>
+            <EditorContent editor={editor} className="editor-box" />
         </div>
     );
 };
 
-export default TiptapEditor;
+export default TiptapEditor

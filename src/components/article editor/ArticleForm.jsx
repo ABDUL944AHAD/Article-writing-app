@@ -99,6 +99,7 @@ const ArticleForm = () => {
     const [category, setCategory] = useState('');
     const [articleContent, setArticleContent] = useState('');
     const [toastMessage, setToastMessage] = useState('');
+    const [images,setImages] = useState([]);
 
     const stripHtmlTags = (html) => {
         const div = document.createElement('div');
@@ -122,6 +123,7 @@ const ArticleForm = () => {
                 authorName,
                 category,
                 articleContent: plainTextContent,
+                images,
             });
 
             // setToastMessage("Article submitted successfully!");
@@ -167,7 +169,7 @@ const ArticleForm = () => {
                     <option value="Food">Food</option>
                 </select>
 
-                <TiptapEditor onChange={setArticleContent} />
+                <TiptapEditor onChange={setArticleContent} onImagesChange={setImages} />
 
                 <button type="submit">Submit Article</button>
             </form>

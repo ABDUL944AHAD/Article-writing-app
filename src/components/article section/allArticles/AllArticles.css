@@ -1,35 +1,36 @@
-.featured-articles {
-    padding: 4rem 1.5rem;
+.all-articles {
+    padding: 4rem 1.5rem 0 1.5rem;
     background-color: #FBFFFF;
     text-align: center;
     font-family: 'Playwrite AU QLD';
 }
 
-.featured-header h2 {
+.articles-header h2 {
     font-size: 2rem;
     color: #1F2937;
     margin-bottom: 0.5rem;
 }
 
-.featured-header p {
+.articles-header p {
     font-size: 1rem;
     color: #6B7280;
     margin-bottom: 1rem;
 }
 
-.category-buttons{
+.category-buttons {
     display: flex;
     justify-content: center;
     align-items: center;
-    gap :0.5rem;
+    gap: 0.5rem;
     flex-wrap: wrap;
     margin-bottom: 1.5rem;
 }
 
-.featured-grid {
+.allarticles-grid {
     display: grid;
     gap: 2rem;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    /* Responsive columns */
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
 }
 
 .article-card {
@@ -44,6 +45,14 @@
 .article-card:hover {
     transform: translateY(-6px) !important;
     box-shadow: 0 12px 28px rgba(59, 130, 246, 0.25);
+}
+
+.article-card img.article-thumbnail {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+    border-radius: 12px;
+    margin-bottom: 0.75rem;
 }
 
 .article-image {
@@ -104,3 +113,24 @@
     margin-top: 1.5rem;
 }
 
+
+/* Large screens (desktop) */
+@media (min-width: 1024px) {
+    .allarticles-grid {
+        grid-template-columns: repeat(4, 1fr);
+    }
+}
+
+/* Medium screens (tablet) */
+@media (min-width: 640px) and (max-width: 1023px) {
+    .featured-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+/* Small screens (mobile) */
+@media (max-width: 639px) {
+    .featured-grid {
+        grid-template-columns: 1fr;
+    }
+}
