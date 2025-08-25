@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import './AllArticles.css';
 import { Link } from 'react-router-dom';
+import SkeletonCard from '../../Skeleton/Skeleton';
 
 const sampleArticles = [
     {
@@ -55,7 +56,7 @@ const AllArticles = () => {
         setLoading(true); // Show loading indicator
         try {
             // Request articles from backend
-            const response = await axios.get('http://localhost:3000/article/get');
+            const response = await axios.get('http://localhost:5000/article/get');
             const fetchedArticles = response.data.data; // Extract array from response
 
             // Filter out any incomplete articles
@@ -110,7 +111,7 @@ const AllArticles = () => {
     const deleteArticle = async (id) => {
         try {
             // Call backend delete endpoint
-            await axios.delete(`http://localhost:3000/article/delete/${id}`);
+            await axios.delete(`http://localhost:5000/article/delete/${id}`);
 
             // Remove it from frontend state
             setArticles(prev => prev.filter(article => article._id !== id && article.id !== id));
@@ -171,72 +172,82 @@ const AllArticles = () => {
             </div>
 
             <div className="allarticles-grid">
-                {filteredArticles.length > 0 ? filteredArticles.map((article) => (
-
-                    <Link
-                        className={`article-card ${!showSamples ? 'backend-article' : ''}`}
-                        key={article._id || article.id}
-                        to={`/article/${article._id || article.id}`}
-                    >
-
-                        {/* ✅ Show first image if available */}
-                        {article.images && article.images.length > 0 && (
-                            <img
-                                src={article.images[0]}
-                                alt={article.articleName}
-                                className="article-thumbnail"
-                            />
-                        )}
-
-                        <div className="article-content">
-                            <h3>{article.articleName}</h3>
-                            <p>
-                                {article.excerpt
-                                    ? article.excerpt
-                                    : `${stripHtmlTags(article.articleContent)?.slice(0, 120)}...`}
-                            </p>
-                            <div className="article-footer">
-                                {article.avatar && (
+                {loading
+                    ? Array.from({ length: 4 }).map((_, i) => <SkeletonCard key={i} />) // ✅ Show 4 skeletons while loading
+                    : filteredArticles.length > 0
+                        ? filteredArticles.map((article) => (
+                            <Link
+                                className={`article-card ${!showSamples ? "backend-article" : ""}`}
+                                key={article._id || article.id}
+                                to={`/article/${article._id || article.id}`}
+                            >
+                                {/* ✅ Show first image if available */}
+                                {article.images && article.images.length > 0 && (
                                     <img
-                                        src={article.avatar}
-                                        alt={article.authorName}
-                                        className="author-avatar"
+                                        src={article.images[0]}
+                                        alt={article.articleName}
+                                        className="article-thumbnail"
                                     />
                                 )}
-                                <span>{article.authorName}</span>
-                                {/* ✅ Only show delete button for backend articles */}
-                                {!showSamples && (
-                                    <button
-                                        onClick={() => deleteArticle(article._id || article.id)}
 
-                                        style={{
-                                            marginLeft: "auto",
-                                            backgroundColor: "#2563EB",      // Primary blue
-                                            color: "#FFFFFF",                 // White text
-                                            border: "none",
-                                            padding: "0.5rem 1rem",
-                                            marginBottom: '-1rem',           // Slightly bigger padding for readability
-                                            borderRadius: "0.75rem",          // Rounded corners consistent with theme
-                                            cursor: "pointer",
-                                            fontSize: "0.85rem",
-                                            fontFamily: "Playwrite AU QLD",
-                                            fontWeight: "500",
-                                            transition: "background-color 0.3s ease",
-                                        }}
-                                        onMouseEnter={e => e.target.style.backgroundColor = "#1E40AF"}  // Darker blue on hover
-                                        onMouseLeave={e => e.target.style.backgroundColor = "#2563EB"}
-                                    >
-                                        Delete
-                                    </button>
-                                )}
-                            </div>
-                        </div>
-                    </Link>
-
-                )) : (
-                    <p style={{ fontFamily: 'Playwrite AU QLD' }}>No articles found in this category.</p>
-                )}
+                                <div className="article-content">
+                                    <h3>{article.articleName}</h3>
+                                    <p>
+                                        {article.excerpt
+                                            ? article.excerpt
+                                            : `${stripHtmlTags(article.articleContent)?.slice(0, 120)}...`}
+                                    </p>
+                                    <div className="article-footer">
+                                        {article.avatar && (
+                                            <img
+                                                src={article.avatar}
+                                                alt={article.authorName}
+                                                className="author-avatar"
+                                            />
+                                        )}
+                                        <span>{article.authorName}</span>
+                                        {!showSamples && (
+                                            <button
+                                                onClick={(e) => {
+                                                    e.preventDefault();
+                                                    e.stopPropagation();
+                                                    deleteArticle(article._id || article.id);
+                                                }}
+                                                style={{
+                                                    marginLeft: "auto",
+                                                    backgroundColor: "#2563EB",
+                                                    color: "#FFFFFF",
+                                                    border: "none",
+                                                    padding: "0.5rem 1rem",
+                                                    marginBottom: "-1rem",
+                                                    borderRadius: "0.75rem",
+                                                    cursor: "pointer",
+                                                    fontSize: "0.85rem",
+                                                    fontFamily: "Playwrite AU QLD",
+                                                    fontWeight: "500",
+                                                    transition: "background-color 0.3s ease",
+                                                }}
+                                                onMouseEnter={(e) =>
+                                                    (e.target.style.backgroundColor = "#1E40AF")
+                                                }
+                                                onMouseLeave={(e) =>
+                                                    (e.target.style.backgroundColor = "#2563EB")
+                                                }
+                                            >
+                                                Delete
+                                            </button>
+                                        )}
+                                    </div>
+                                </div>
+                            </Link>
+                        ))
+                        : (
+                            <p style={{ fontFamily: "Playwrite AU QLD" }}>
+                                No articles found in this category.
+                            </p>
+                        )}
             </div>
+
 
             {/* Button */}
             <div style={{ marginTop: '2rem' }}>

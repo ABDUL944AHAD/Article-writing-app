@@ -2,36 +2,38 @@ import React, { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
 import axios from "axios";
 import "./ArticleDetail.css";
-
+import ArticleDetailSkeleton from "../../Skeleton/DetailSkeleton";
 function ArticleDetail() {
     const { id } = useParams();
     const [article, setArticle] = useState(null);
     const [relatedArticles, setRelatedArticles] = useState([]);
 
     useEffect(() => {
+        window.scrollTo(0, 0); // instantly jumps to top
         // fetch article by id
         axios
-            .get(`http://localhost:3000/article/${id}`)
+            .get(`http://localhost:5000/article/${id}`)
             .then((res) => setArticle(res.data))
             .catch((err) => console.error("Error fetching article:", err));
     }, [id]);
 
+
     useEffect(() => {
-        if (article?.category) {
-            // fetch related articles by same category
+        if (article?._id) {
             axios
-                .get(`http://localhost:3000/articles?category=${article.category}`)
+                .get(`http://localhost:5000/article/related/${article._id}`)
                 .then((res) => {
-                    // exclude the current article
-                    const filtered = res.data.filter((a) => a._id !== article._id);
-                    setRelatedArticles(filtered);
+                    console.log("Related articles:", res.data);
+                    setRelatedArticles(res.data);
                 })
-                .catch((err) => console.error("Error fetching related:", err));
+                .catch((err) => console.error("Error fetching related articles:", err));
         }
     }, [article]);
 
+    
     if (!article)
-        return <p className="loading-text">Loading article details...</p>;
+        return <ArticleDetailSkeleton/>
+    
 
     // sharing URLs
     const shareUrl = window.location.href;
@@ -116,13 +118,23 @@ function ArticleDetail() {
                                 to={`/article/${ra._id}`}
                                 className="related-card"
                             >
-                                <h3>{ra.articleName}</h3>
-                                <p>By {ra.authorName}</p>
+                                {ra.images && ra.images.length > 0 && (
+                                    <img
+                                        src={ra.images[0]}
+                                        alt={ra.articleName}
+                                        className="related-thumbnail"
+                                    />
+                                )}
+                                <div className="related-info">
+                                    <h3>{ra.articleName}</h3>
+                                    <p>By {ra.authorName}</p>
+                                </div>
                             </Link>
                         ))}
                     </div>
                 </div>
             )}
+
         </div>
     );
 }
