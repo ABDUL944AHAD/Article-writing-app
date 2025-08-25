@@ -1,12 +1,14 @@
 import React from 'react'
 import './HeroSection.css'
 import { motion } from 'framer-motion'
+import { Link as RouterLink } from 'react-router-dom'
+import { Link as ScrollLink } from 'react-scroll'
 function HeroSection() {
   return (
     <motion.div className='hero-container'
-      initial={{ opacity: 0,  y: 40 , filter: 'blur(2px)'  }}
-      animate={{ opacity: 1,  y: 0 , filter: 'blur(0px)' }}
-      transition={{ duration: 0.8, delay:0.5, ease: 'easeOut' }}
+      initial={{ opacity: 0, y: 40, filter: 'blur(2px)' }}
+      animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
+      transition={{ duration: 0.8, delay: 0.5, ease: 'easeOut' }}
     >
       <div className='hero-left'>
         <div className="hero-content">
@@ -18,8 +20,19 @@ function HeroSection() {
             <input type="text" placeholder='Search by topic , language or tag' />
           </div>
           <div className="hero-buttons">
-            <button>Start Writing</button>
-            <button>Explore Articles</button>
+            <button> 
+              <RouterLink to='/create-article'>Start Writing</RouterLink>
+               </button>
+              <ScrollLink
+                to="all-articles"  // matches the id
+                smooth={true}       // smooth scrolling
+                duration={1500}      // duration in ms
+                offset={50}
+                >
+                <button>
+                Explore Articles
+              </button>
+              </ScrollLink>
           </div>
         </div>
       </div>

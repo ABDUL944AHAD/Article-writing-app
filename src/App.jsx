@@ -1,5 +1,5 @@
 // src/App.jsx
-import React from 'react';
+import React, { useState } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 
 import HeroSection from './components/hero/HeroSection';
@@ -8,14 +8,14 @@ import Categories from './components/categories/Categories';
 import FeaturedArticles from './components/article section/featuredArticles/FeaturedArticles';
 import AllArticles from './components/article section/allArticles/AllArticles';
 import ArticleForm from './components/article editor/ArticleForm';
+import ArticleDetail from './components/article section/articleDetail/ArticleDetail';
 function HomePage() {
   return (
     <>
-      <Navbar />
       <HeroSection />
       <Categories />
       <FeaturedArticles />
-      <AllArticles />
+      <AllArticles  />
     </>
   );
 }
@@ -23,7 +23,6 @@ function HomePage() {
 function CreateArticlePage() {
   return (
     <>
-      <Navbar />
       <ArticleForm />
     </>
   );
@@ -32,9 +31,11 @@ function CreateArticlePage() {
 function App() {
   return (
     <Router>
+      <Navbar/>
       <Routes>
         <Route path="/" element={<HomePage />} />
         <Route path="/create-article" element={<CreateArticlePage />} />
+        <Route path='/article/:id' element={<ArticleDetail/>}/>
       </Routes>
     </Router>
   );

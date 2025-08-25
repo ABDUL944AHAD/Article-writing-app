@@ -114,6 +114,40 @@
 }
 
 
+/* Only backend articles */
+.backend-article {
+    max-height: 400px;
+    /* Limit card height */
+    display: flex;
+    flex-direction: column;
+    /* padding-bottom: 2rem; */
+}
+
+/* Thumbnail for backend */
+.backend-article img.article-thumbnail {
+    height: 180px;
+    /* smaller uniform height */
+}
+
+/* Excerpt text truncation for backend */
+.backend-article .article-content p {
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    /* only 3 lines */
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    word-wrap: break-word;
+}
+
+/* Title truncation */
+.backend-article .article-content h3 {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+
 /* Large screens (desktop) */
 @media (min-width: 1024px) {
     .allarticles-grid {

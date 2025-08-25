@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import './AllArticles.css';
+import { Link } from 'react-router-dom';
 
 const sampleArticles = [
     {
@@ -118,7 +119,12 @@ const AllArticles = () => {
             console.error("Error deleting article:", error);
         }
     };
-
+    const stripHtmlTags = (html) => {
+        if (!html) return "";
+        const div = document.createElement("div");
+        div.innerHTML = html;
+        return div.textContent || div.innerText || "";
+    };
 
 
     return (
@@ -166,7 +172,12 @@ const AllArticles = () => {
 
             <div className="allarticles-grid">
                 {filteredArticles.length > 0 ? filteredArticles.map((article) => (
-                    <div className="article-card" key={article._id || article.id}>
+
+                    <Link
+                        className={`article-card ${!showSamples ? 'backend-article' : ''}`}
+                        key={article._id || article.id}
+                        to={`/article/${article._id || article.id}`}
+                    >
 
                         {/* ✅ Show first image if available */}
                         {article.images && article.images.length > 0 && (
@@ -182,7 +193,7 @@ const AllArticles = () => {
                             <p>
                                 {article.excerpt
                                     ? article.excerpt
-                                    : `${article.articleContent?.slice(0, 100)}...`}
+                                    : `${stripHtmlTags(article.articleContent)?.slice(0, 120)}...`}
                             </p>
                             <div className="article-footer">
                                 {article.avatar && (
@@ -197,23 +208,30 @@ const AllArticles = () => {
                                 {!showSamples && (
                                     <button
                                         onClick={() => deleteArticle(article._id || article.id)}
+
                                         style={{
                                             marginLeft: "auto",
-                                            backgroundColor: "#FF3B7F",
-                                            color: "#fff",
+                                            backgroundColor: "#2563EB",      // Primary blue
+                                            color: "#FFFFFF",                 // White text
                                             border: "none",
-                                            padding: "0.25rem 0.5rem",
-                                            borderRadius: "0.5rem",
+                                            padding: "0.5rem 1rem",
+                                            marginBottom: '-1rem',           // Slightly bigger padding for readability
+                                            borderRadius: "0.75rem",          // Rounded corners consistent with theme
                                             cursor: "pointer",
-                                            fontSize: "0.8rem"
+                                            fontSize: "0.85rem",
+                                            fontFamily: "Playwrite AU QLD",
+                                            fontWeight: "500",
+                                            transition: "background-color 0.3s ease",
                                         }}
+                                        onMouseEnter={e => e.target.style.backgroundColor = "#1E40AF"}  // Darker blue on hover
+                                        onMouseLeave={e => e.target.style.backgroundColor = "#2563EB"}
                                     >
                                         Delete
                                     </button>
                                 )}
                             </div>
                         </div>
-                    </div>
+                    </Link>
 
                 )) : (
                     <p style={{ fontFamily: 'Playwrite AU QLD' }}>No articles found in this category.</p>
