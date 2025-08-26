@@ -72,6 +72,7 @@ const ArticleForm = () => {
                     <option value="Finance">Finance</option>
                     <option value="Travel">Travel</option>
                     <option value="Food">Food</option>
+                    <option value="Progress">Progress</option>
                 </select>
 
                 <TiptapEditor 

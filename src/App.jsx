@@ -9,6 +9,10 @@ import FeaturedArticles from './components/article section/featuredArticles/Feat
 import AllArticles from './components/article section/allArticles/AllArticles';
 import ArticleForm from './components/article editor/ArticleForm';
 import ArticleDetail from './components/article section/articleDetail/ArticleDetail';
+import Testimonials from './components/testimonial/Testimonial';
+import Banner from './components/banner/Banner';
+import Newsletter from './components/newsletter/Newsletter';
+import Footer from './components/footer/Footer';
 function HomePage() {
   return (
     <>
@@ -16,6 +20,10 @@ function HomePage() {
       <Categories />
       <FeaturedArticles />
       <AllArticles  />
+      <Testimonials/>
+      <Banner/>
+      <Newsletter/>
+      <Footer/>
     </>
   );
 }
