@@ -84,3 +84,88 @@ a {
 .button-primary:hover .button-link {
     color: white;
 }
+
+
+/* HIDE hamburger on desktop */
+.hamburger {
+    display: none;
+    font-size: 2rem;
+    cursor: pointer;
+    color: white;
+}
+
+/* Overlay Menu (hidden by default) */
+.mobileMenu {
+    position: fixed;
+    top: 0;
+    left: -100%;
+    /* hidden */
+    width: 100%;
+    height: 100%;
+    background: #0F172A;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    transition: left 0.3s ease;
+    z-index: 999;
+}
+
+.mobileMenu.open {
+    left: 0;
+    /* slide in */
+}
+
+.mobileMenu ul {
+    list-style: none;
+    padding: 0;
+    text-align: center;
+}
+
+.mobileMenu ul li {
+    margin: 1.5rem 0;
+    font-size: 1.5rem;
+}
+
+.mobileMenu a {
+    color: white;
+    text-decoration: none;
+    font-weight: 600;
+}
+
+.mobileMenu .mobile-button {
+    display: inline-block;
+    background: #2563EB;
+    padding: 0.75rem 2rem;
+    border-radius: 8px;
+    margin-top: 2rem;
+    font-weight: 600;
+}
+
+.mobileMenu .mobile-button:hover {
+    background: #1E40AF;
+}
+
+/* Close Button */
+.close-btn {
+    position: absolute;
+    top: 1.5rem;
+    right: 2rem;
+    font-size: 2rem;
+    background: none;
+    border: none;
+    color: white;
+    cursor: pointer;
+}
+
+/* Responsive at 600px */
+@media (max-width: 600px) {
+    .leftSide {
+        display: none;
+        /* hide desktop nav */
+    }
+
+    .hamburger {
+        display: block;
+    }
+}

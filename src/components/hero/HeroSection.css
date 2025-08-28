@@ -1,7 +1,6 @@
 .hero-container{
     display: flex;
     flex-direction: row;
-    
     align-items: center;
     background-color: #FBFFFF;
     margin-top: 1rem;
@@ -81,3 +80,50 @@
     background-color: #1E40AF;
 }
 
+@media (max-width: 600px) {
+    .hero-container {
+        flex-direction: column;
+        /* stack content + image */
+        text-align: center;
+        padding: 1.5rem 1rem;
+    }
+
+    .hero-left {
+        margin-left: 0;
+        padding: 1rem;
+    }
+
+    .hero-content h1 {
+        font-size: 1.8rem;
+    }
+
+    .hero-content p {
+        font-size: 0.95rem;
+    }
+
+    .hero-input input {
+        width: 100%;
+        /* full width */
+        max-width: 320px;
+    }
+
+    .hero-buttons {
+        flex-direction: column;
+        /* stack buttons */
+        gap: 0.8rem;
+        width: 100%;
+    }
+
+    .hero-buttons button {
+        width: 100%;
+        max-width: 280px;
+        padding: 0.8rem 1rem;
+        font-size: 1rem;
+    }
+
+    .hero-right img {
+        width: 80%;
+        height: auto;
+        margin: 2rem auto 0 auto;
+    }
+}

@@ -67,3 +67,31 @@
     font-size: 1.1rem;
     color: #1F2937;
 }
+
+@media (max-width: 600px) {
+    .categories-header h2 {
+        font-size: 1.5rem;
+    }
+
+    .categories-header p {
+        font-size: 0.9rem;
+    }
+
+    .categories-carousel {
+        gap: 1rem;
+    }
+
+    .category-card {
+        width: 120px;
+        height: 120px;
+        border-radius: 1rem;
+    }
+
+    .category-emoji {
+        font-size: 1.6rem;
+    }
+
+    .category-card h3 {
+        font-size: 1rem;
+    }
+}
