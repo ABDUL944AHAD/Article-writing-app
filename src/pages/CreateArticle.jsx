@@ -1,7 +1,7 @@
 // src/pages/createArticle.jsx
 
 // import React from 'react';
-import ArticleForm from '../article editor/ArticleForm';
+import ArticleForm from '../components/article editor/ArticleForm';
 
 const CreateArticlePage = () => {
     return (

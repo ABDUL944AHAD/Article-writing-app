@@ -28,7 +28,9 @@ function Navbar() {
               Explore
             </ScrollLink>
           </li>
-          <li className='nav-link'>Login</li>
+          <li className='nav-link'>
+            <RouterLink to='/login'>Login</RouterLink>
+          </li>
         </ul>
 
         <button className='button-primary'>

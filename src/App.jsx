@@ -13,17 +13,24 @@ import Testimonials from './components/testimonial/Testimonial';
 import Banner from './components/banner/Banner';
 import Newsletter from './components/newsletter/Newsletter';
 import Footer from './components/footer/Footer';
+import Login from './components/login/Login';
+import Signup from './components/signup/Signup';
+import DashboardLayout from './Dashboard/Dashboard';
+
+
+
 function HomePage() {
   return (
     <>
+     
       <HeroSection />
       <Categories />
       <FeaturedArticles />
-      <AllArticles  />
-      <Testimonials/>
-      <Banner/>
-      <Newsletter/>
-      <Footer/>
+      <AllArticles />
+      <Testimonials />
+      <Banner />
+      <Newsletter />
+      <Footer />
     </>
   );
 }
@@ -39,11 +46,15 @@ function CreateArticlePage() {
 function App() {
   return (
     <Router>
-      <Navbar/>
+      <Navbar />
       <Routes>
         <Route path="/" element={<HomePage />} />
         <Route path="/create-article" element={<CreateArticlePage />} />
-        <Route path='/article/:id' element={<ArticleDetail/>}/>
+        <Route path='/article/:id' element={<ArticleDetail />} />
+        <Route path='/login' element={<Login />} />
+        <Route path='/signup' element={<Signup />} />
+        <Route path='/dashboard' element={<DashboardLayout/>} />
+        
       </Routes>
     </Router>
   );

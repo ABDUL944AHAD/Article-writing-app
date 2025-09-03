@@ -12,7 +12,7 @@ function ArticleDetail() {
         window.scrollTo(0, 0); // instantly jumps to top
         // fetch article by id
         axios
-            .get(`http://localhost:5000/article/${id}`)
+            .get(`http://localhost:5000/articles/get/${id}`)
             .then((res) => setArticle(res.data))
             .catch((err) => console.error("Error fetching article:", err));
     }, [id]);
@@ -21,7 +21,7 @@ function ArticleDetail() {
     useEffect(() => {
         if (article?._id) {
             axios
-                .get(`http://localhost:5000/article/related/${article._id}`)
+                .get(`http://localhost:5000/articles/related/${article._id}`)
                 .then((res) => {
                     console.log("Related articles:", res.data);
                     setRelatedArticles(res.data);

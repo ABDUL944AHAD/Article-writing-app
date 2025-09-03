@@ -1,0 +1,38 @@
+.sidebar {
+    width: 220px;
+    height: 100vh;
+    background-color: #0f172a;
+    /* dark background */
+    color: white;
+    padding: 20px;
+    box-sizing: border-box;
+    position: fixed;
+}
+
+.sidebar-title {
+    font-size: 1.5rem;
+    font-weight: bold;
+    margin-bottom: 2rem;
+}
+
+.sidebar-links {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.sidebar-links li {
+    margin-bottom: 1rem;
+}
+
+.sidebar-links li a {
+    text-decoration: none;
+    color: white;
+    font-weight: 500;
+}
+
+.sidebar-links li.active a {
+    color: #2563eb;
+    /* primary blue for active link */
+    font-weight: bold;
+}

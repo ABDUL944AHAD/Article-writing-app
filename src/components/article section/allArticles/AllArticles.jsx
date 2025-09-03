@@ -56,7 +56,7 @@ const AllArticles = () => {
         setLoading(true); // Show loading indicator
         try {
             // Request articles from backend
-            const response = await axios.get('http://localhost:5000/article/get');
+            const response = await axios.get('http://localhost:5000/articles/get');
             const fetchedArticles = response.data.data; // Extract array from response
 
             // Filter out any incomplete articles
@@ -131,7 +131,7 @@ const AllArticles = () => {
     return (
         <div className="all-articles" id='all-articles'>
             <div className="articles-header">
-                <h2>All Articles</h2>
+                <h2>Latest Articles</h2>
                 <p>Browse our latest insights, tutorials, and educational write-ups.</p>
 
                 {/* Category buttons */}

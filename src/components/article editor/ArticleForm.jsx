@@ -21,7 +21,7 @@ const ArticleForm = () => {
         }
 
         try {
-            await axios.post('http://localhost:5000/article/save', {
+            await axios.post('http://localhost:5000/articles/save', {
                 articleName,
                 authorName,
                 category,
