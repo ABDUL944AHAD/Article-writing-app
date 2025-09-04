@@ -147,7 +147,6 @@
     text-overflow: ellipsis;
 }
 
-
 /* Large screens (desktop) */
 @media (min-width: 1024px) {
     .allarticles-grid {

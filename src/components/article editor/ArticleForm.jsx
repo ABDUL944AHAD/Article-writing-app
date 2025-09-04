@@ -1,44 +1,59 @@
-import React, { useState } from 'react';
-import TiptapEditor from './Editor';
-import axios from 'axios';
-import Toast from '../Toaster/Toast';
-import './ArticleForm.css';
+import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import axios from "axios";
+import TiptapEditor from "./Editor";
+import Toast from "../Toaster/Toast";
+import PromptModal from "../promptModel/PromptModal";
+import "./ArticleForm.css";
 
 const ArticleForm = () => {
-    const [articleName, setArticleName] = useState('');
-    const [authorName, setAuthorName] = useState('');
-    const [category, setCategory] = useState('');
-    const [articleContent, setArticleContent] = useState('');
-    const [toastMessage, setToastMessage] = useState('');
+    const [articleName, setArticleName] = useState("");
+    const [category, setCategory] = useState("");
+    const [articleContent, setArticleContent] = useState("");
     const [images, setImages] = useState([]);
+    const [toastMessage, setToastMessage] = useState("");
+    const [authorName, setAuthorName] = useState("");
+    const [showPrompt, setShowPrompt] = useState(false); // 👈 modal state
+
+    const navigate = useNavigate();
+    const token = localStorage.getItem("token");
+    const storedUser = JSON.parse(localStorage.getItem("user"));
+
+    useEffect(() => {
+        if (storedUser && storedUser.name) {
+            setAuthorName(storedUser.name);
+        } 
+    }, [storedUser]);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
 
-        if (!articleName || !authorName || !category || !articleContent) {
+        if (!token) {
+            setShowPrompt(true); // 👈 open modal instead of toast
+            return;
+        }
+
+        if (!articleName || !category || !articleContent) {
             setToastMessage("⚠️ Please fill in all fields");
             return;
         }
 
         try {
-            await axios.post('http://localhost:5000/articles/save', {
-                articleName,
-                authorName,
-                category,
-                articleContent,
-                images,
-            });
+            await axios.post(
+                "http://localhost:5000/articles/save",
+                { articleName, category, articleContent, images },
+                { headers: { Authorization: `Bearer ${token}` } }
+            );
 
-            setToastMessage("🚀 Great job! Your article is published. Check it out in All Articles!");
-            
-            // Reset form fields
-            setArticleName('');
-            setAuthorName('');
-            setCategory('');
-            setArticleContent('');
+            setToastMessage("🚀 Great job! Your article is published.");
+            setArticleName("");
+            setCategory("");
+            setArticleContent("");
             setImages([]);
+
+            setTimeout(() => navigate("/dashboard"), 1500);
         } catch (error) {
-            console.error('Submission error:', error);
+            console.error("Submission error:", error);
             setToastMessage("❌ Error submitting article");
         }
     };
@@ -58,11 +73,14 @@ const ArticleForm = () => {
                 <input
                     type="text"
                     placeholder="Author Name"
-                    value={authorName}
-                    onChange={(e) => setAuthorName(e.target.value)}
+                    value={authorName || ""}
+                    readOnly
                 />
 
-                <select value={category} onChange={(e) => setCategory(e.target.value)}>
+                <select
+                    value={category}
+                    onChange={(e) => setCategory(e.target.value)}
+                >
                     <option value="">Select Category</option>
                     <option value="Programming">Programming</option>
                     <option value="Tech">Tech</option>
@@ -75,17 +93,23 @@ const ArticleForm = () => {
                     <option value="Progress">Progress</option>
                 </select>
 
-                <TiptapEditor 
-                    onChange={setArticleContent} 
-                    onImagesChange={setImages} 
-                />
+                <TiptapEditor onChange={setArticleContent} onImagesChange={setImages} />
 
-                <button type="submit">Submit Article</button>
+                <button type="submit">
+                    {token ? "Publish Article" : "Login to Publish"}
+                </button>
             </form>
 
             {toastMessage && (
-                <Toast message={toastMessage} onClose={() => setToastMessage('')} />
+                <Toast message={toastMessage} onClose={() => setToastMessage("")} />
             )}
+
+            {/* Modal prompt */}
+            <PromptModal
+                open={showPrompt}
+                onClose={() => setShowPrompt(false)}
+                onConfirm={() => navigate("/login")}
+            />
         </>
     );
 };

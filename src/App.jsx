@@ -1,5 +1,4 @@
-// src/App.jsx
-import React, { useState } from 'react';
+import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 
 import HeroSection from './components/hero/HeroSection';
@@ -16,13 +15,14 @@ import Footer from './components/footer/Footer';
 import Login from './components/login/Login';
 import Signup from './components/signup/Signup';
 import DashboardLayout from './Dashboard/Dashboard';
-
-
+import ScrollToTop from './components/scrollToTop/ScrollToTop';
+import ProtectedRoute from './utils/ProtectedRoutes';
+import RouteWatcher from './utils/RouteWatcher';   // 👈 import
 
 function HomePage() {
   return (
     <>
-     
+      <Navbar sticky={false} />
       <HeroSection />
       <Categories />
       <FeaturedArticles />
@@ -38,6 +38,7 @@ function HomePage() {
 function CreateArticlePage() {
   return (
     <>
+      <Navbar sticky={false} />
       <ArticleForm />
     </>
   );
@@ -46,15 +47,21 @@ function CreateArticlePage() {
 function App() {
   return (
     <Router>
-      <Navbar />
+      <ScrollToTop />
+      <RouteWatcher />   {/* 👈 listens for route changes */}
       <Routes>
         <Route path="/" element={<HomePage />} />
         <Route path="/create-article" element={<CreateArticlePage />} />
-        <Route path='/article/:id' element={<ArticleDetail />} />
-        <Route path='/login' element={<Login />} />
-        <Route path='/signup' element={<Signup />} />
-        <Route path='/dashboard' element={<DashboardLayout/>} />
-        
+        <Route path="/article/:id" element={<><Navbar sticky={false} /><ArticleDetail /></>} />
+        <Route path="/login" element={<><Navbar sticky={false} /><Login /></>} />
+        <Route path="/signup" element={<><Navbar sticky={false} /><Signup /></>} />
+
+        {/* Dashboard route with sticky navbar */}
+        <Route path="/dashboard" element={
+          <ProtectedRoute>
+            <DashboardLayout />
+          </ProtectedRoute>
+        } />
       </Routes>
     </Router>
   );

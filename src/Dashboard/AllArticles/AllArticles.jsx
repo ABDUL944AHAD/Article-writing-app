@@ -4,12 +4,12 @@ import SkeletonCard from "../../components/Skeleton/Skeleton";
 import "./AllArticles.css";
 
 const AllArticles = ({ role, token }) => {
+    const INITIAL_COUNT = 6;
     const [articles, setArticles] = useState([]);
     const [loading, setLoading] = useState(true);
-    const [visibleCount, setVisibleCount] = useState(6); // Show 6 initially
+    const [visibleCount, setVisibleCount] = useState(INITIAL_COUNT);
     const [selectedCategory, setSelectedCategory] = useState("All");
 
-    // Fetch articles
     useEffect(() => {
         const fetchArticles = async () => {
             setLoading(true);
@@ -34,7 +34,6 @@ const AllArticles = ({ role, token }) => {
         fetchArticles();
     }, [role, token]);
 
-    // Delete article
     const deleteArticle = async (id) => {
         if (!window.confirm("Are you sure you want to delete this article?")) return;
 
@@ -46,34 +45,29 @@ const AllArticles = ({ role, token }) => {
 
             await axios.delete(url, { headers: { Authorization: `Bearer ${token}` } });
             setArticles((prev) => prev.filter((a) => a._id !== id));
-            alert("Article deleted successfully!");
+            
         } catch (err) {
             console.error("Delete error:", err);
             alert("Failed to delete article.");
         }
     };
 
-    // Update article
     const updateArticle = (article) => {
         window.location.href = `/editor/${article._id}`;
     };
 
-    // Categories
     const categories = [
         "All",
         ...Array.from(new Set(articles.map((a) => a.category || "Other"))),
     ];
 
-    // Filtered articles
     const filteredArticles =
         selectedCategory === "All"
             ? articles
             : articles.filter((a) => (a.category || "Other") === selectedCategory);
 
-    // Articles to show based on visibleCount
     const visibleArticles = filteredArticles.slice(0, visibleCount);
 
-    // Strip HTML
     const stripHtml = (html) => {
         if (!html) return "";
         const div = document.createElement("div");
@@ -82,12 +76,12 @@ const AllArticles = ({ role, token }) => {
     };
 
     return (
-        <div className="all-articles">
-            <div className="articles-header">
+        <div className="dashboard-articles">
+            <div className="dashboard-articles-header">
                 <h2>All Articles</h2>
                 <p>Browse the latest articles.</p>
 
-                <div className="category-buttons">
+                <div className="dashboard-category-filters">
                     {categories.map((cat) => (
                         <button
                             key={cat}
@@ -100,65 +94,71 @@ const AllArticles = ({ role, token }) => {
                 </div>
             </div>
 
-            <div className="allarticles-grid">
+            <div className="dashboard-articles-grid">
                 {loading
-                    ? Array.from({ length: 6 }).map((_, i) => <SkeletonCard key={i} />)
+                    ? Array.from({ length: INITIAL_COUNT }).map((_, i) => (
+                        <SkeletonCard key={i} />
+                    ))
                     : visibleArticles.length > 0
                         ? visibleArticles.map((article) => (
-                            <div key={article._id} className="article-card backend-article">
-                                {article.images && article.images[0] && (
+                            <div key={article._id} className="dashboard-article-card">
+                                {article.images?.[0] && (
                                     <img
                                         src={article.images[0]}
                                         alt={article.articleName}
-                                        className="article-thumbnail"
+                                        className="dashboard-article-thumbnail"
                                     />
                                 )}
-                                <div className="article-content">
+                                <div className="dashboard-article-content">
                                     <h3>{article.articleName}</h3>
                                     <p>{stripHtml(article.articleContent).slice(0, 120)}...</p>
-                                    <div className="article-footer">
+                                    <div className="dashboard-article-footer">
                                         {article.avatar && (
                                             <img
                                                 src={article.avatar}
                                                 alt={article.authorName}
-                                                className="author-avatar"
+                                                className="dashboard-author-avatar"
                                             />
                                         )}
-                                        <span>{article.authorName}</span>
+                                        <span className="dashboard-author-name">{article.authorName}</span>
 
                                         {role === "admin" && (
-                                            <div
-                                                style={{
-                                                    marginLeft: "auto",
-                                                    display: "flex",
-                                                    gap: "0.5rem",
-                                                }}
-                                            >
+                                            <div className="dashboard-footer-actions" style={{ marginLeft: "auto" }}>
                                                 <button onClick={() => updateArticle(article)}>Update</button>
-                                                <button onClick={() => deleteArticle(article._id)}>Delete</button>
+                                                <button
+                                                    className="dashboard-delete-button"
+                                                    onClick={() => deleteArticle(article._id)}
+                                                >
+                                                    Delete
+                                                </button>
                                             </div>
                                         )}
                                     </div>
                                 </div>
                             </div>
                         ))
-                        : (
-                            <p>No articles found in this category.</p>
-                        )}
+                        : <p>No articles found in this category.</p>}
             </div>
 
-            {/* Load More Button */}
-            {visibleCount < filteredArticles.length && (
-                <div style={{ marginTop: "2rem" }}>
-                    <button
-                        className="load-btn"
-                        onClick={() => setVisibleCount((prev) => prev + 6)}
-                    >
-                        Load More
-                    </button>
-                </div>
-            )}
+            <div className="dashboard-articles-buttons">
+                <button
+                    className={`dashboard-load-more-btn ${visibleCount < filteredArticles.length ? "visible" : "hidden"
+                        }`}
+                    onClick={() => setVisibleCount(prev => prev + INITIAL_COUNT)}
+                >
+                    Load More
+                </button>
+
+                <button
+                    className={`dashboard-show-less-btn ${visibleCount > INITIAL_COUNT ? "visible" : "hidden"
+                        }`}
+                    onClick={() => setVisibleCount(INITIAL_COUNT)}
+                >
+                    Show Less
+                </button>
+            </div>
         </div>
+
     );
 };
 

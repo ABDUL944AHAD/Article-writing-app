@@ -4,6 +4,8 @@ import axios from "axios";
 import StatCard from "../components/StatsCard/StatsCard";
 import RecentActivities from "../components/recentActivites/RecentActivites";
 import AllArticles from "./AllArticles/AllArticles";
+import Navbar from "../components/navbar/Navbar";
+import Sidebar from "../components/sidebar/Sidebar";
 import {
     Chart as ChartJS,
     Title,
@@ -112,7 +114,9 @@ const Dashboard = () => {
         timestamp: a.createdAt,
     }));
 
-    return (
+    return (<>
+        <Navbar sticky={true} transparent={true} />
+        <Sidebar />
         <div className="dashboard">
             <h1>Dashboard ({role})</h1>
 
@@ -160,13 +164,14 @@ const Dashboard = () => {
                     </div>
                 </div>
             </div>
-            <div className="dashboard-activities">
+            <div className="dashboard-activities" id="recent-activities" >
                 <RecentActivities activities={activities} limit={6} />
             </div>
-            <div className="dashboard-articles">
+            <div className="dashboard-articles" id="all-articles">
                 <AllArticles role={role} token={token} />
             </div>
         </div>
+    </>
     );
 };
 

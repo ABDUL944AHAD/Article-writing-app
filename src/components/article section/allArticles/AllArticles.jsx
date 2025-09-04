@@ -206,37 +206,7 @@ const AllArticles = () => {
                                             />
                                         )}
                                         <span>{article.authorName}</span>
-                                        {!showSamples && (
-                                            <button
-                                                onClick={(e) => {
-                                                    e.preventDefault();
-                                                    e.stopPropagation();
-                                                    deleteArticle(article._id || article.id);
-                                                }}
-                                                style={{
-                                                    marginLeft: "auto",
-                                                    backgroundColor: "#2563EB",
-                                                    color: "#FFFFFF",
-                                                    border: "none",
-                                                    padding: "0.5rem 1rem",
-                                                    marginBottom: "-1rem",
-                                                    borderRadius: "0.75rem",
-                                                    cursor: "pointer",
-                                                    fontSize: "0.85rem",
-                                                    fontFamily: "Playwrite AU QLD",
-                                                    fontWeight: "500",
-                                                    transition: "background-color 0.3s ease",
-                                                }}
-                                                onMouseEnter={(e) =>
-                                                    (e.target.style.backgroundColor = "#1E40AF")
-                                                }
-                                                onMouseLeave={(e) =>
-                                                    (e.target.style.backgroundColor = "#2563EB")
-                                                }
-                                            >
-                                                Delete
-                                            </button>
-                                        )}
+                                        
                                     </div>
                                 </div>
                             </Link>

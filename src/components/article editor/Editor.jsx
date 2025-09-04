@@ -1,11 +1,11 @@
-// import React, { useEffect, useState } from 'react';
-import { EditorContent, useEditor } from '@tiptap/react';
-import StarterKit from '@tiptap/starter-kit';
-import Image from '@tiptap/extension-image';
-import Placeholder from '@tiptap/extension-placeholder';
+// components/Editor.jsx
+import React from "react";
+import { EditorContent, useEditor } from "@tiptap/react";
+import StarterKit from "@tiptap/starter-kit";
+import Image from "@tiptap/extension-image";
+import Placeholder from "@tiptap/extension-placeholder";
 
-
-import './Editor.css';
+import "./Editor.css";
 
 const TiptapEditor = ({ onChange, onImagesChange }) => {
     const editor = useEditor({
@@ -13,28 +13,28 @@ const TiptapEditor = ({ onChange, onImagesChange }) => {
             StarterKit,
             Image,
             Placeholder.configure({
-                placeholder: 'Start writing your article...',
+                placeholder: "Start writing your article...",
             }),
         ],
-        content: '',
+        content: "",
         onUpdate: ({ editor }) => {
             const html = editor.getHTML();
-            onChange(html); // ✅ send full HTML/text to parent
+            onChange(html);
 
-            // ✅ Extract all image URLs from content
+            // extract image URLs
             const tempDiv = document.createElement("div");
             tempDiv.innerHTML = html;
             const imgTags = tempDiv.querySelectorAll("img");
-            const imageUrls = Array.from(imgTags).map(img => img.getAttribute("src"));
+            const imageUrls = Array.from(imgTags).map((img) => img.getAttribute("src"));
 
             if (onImagesChange) {
-                onImagesChange(imageUrls); // ✅ send images separately to parent
+                onImagesChange(imageUrls);
             }
         },
     });
 
     const addImage = () => {
-        const url = window.prompt('Enter image URL');
+        const url = window.prompt("Enter image URL");
         if (url) {
             editor.chain().focus().setImage({ src: url }).run();
         }
@@ -45,27 +45,44 @@ const TiptapEditor = ({ onChange, onImagesChange }) => {
     return (
         <div className="editor-wrapper">
             <div className="toolbar">
-                <button type='button' onClick={() => editor.chain().focus().toggleBold().run()}
-                    className={editor.isActive('bold') ? 'active' : ''}>
+                <button
+                    type="button"
+                    onClick={() => editor.chain().focus().toggleBold().run()}
+                    className={editor.isActive("bold") ? "active" : ""}
+                >
                     Bold
                 </button>
-                <button type='button' onClick={() => editor.chain().focus().toggleItalic().run()}
-                    className={editor.isActive('italic') ? 'active' : ''}>
+                <button
+                    type="button"
+                    onClick={() => editor.chain().focus().toggleItalic().run()}
+                    className={editor.isActive("italic") ? "active" : ""}
+                >
                     Italic
                 </button>
-                <button type='button' onClick={() => editor.chain().focus().toggleHeading({ level: 1 }).run()}
-                    className={editor.isActive('heading', { level: 1 }) ? 'active' : ''}>
+                <button
+                    type="button"
+                    onClick={() => editor.chain().focus().toggleHeading({ level: 1 }).run()}
+                    className={editor.isActive("heading", { level: 1 }) ? "active" : ""}
+                >
                     H1
                 </button>
-                <button type='button' onClick={() => editor.chain().focus().toggleHeading({ level: 2 }).run()}
-                    className={editor.isActive('heading', { level: 2 }) ? 'active' : ''}>
+                <button
+                    type="button"
+                    onClick={() => editor.chain().focus().toggleHeading({ level: 2 }).run()}
+                    className={editor.isActive("heading", { level: 2 }) ? "active" : ""}
+                >
                     H2
                 </button>
-                <button type='button' onClick={() => editor.chain().focus().toggleBulletList().run()}
-                    className={editor.isActive('bulletList') ? 'active' : ''}>
+                <button
+                    type="button"
+                    onClick={() => editor.chain().focus().toggleBulletList().run()}
+                    className={editor.isActive("bulletList") ? "active" : ""}
+                >
                     • List
                 </button>
-                <button type='button' onClick={addImage}>Add Image</button>
+                <button type="button" onClick={addImage}>
+                    Add Image
+                </button>
             </div>
 
             <EditorContent editor={editor} className="editor-box" />
@@ -73,4 +90,4 @@ const TiptapEditor = ({ onChange, onImagesChange }) => {
     );
 };
 
-export default TiptapEditor
+export default TiptapEditor;

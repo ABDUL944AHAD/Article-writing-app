@@ -6,8 +6,40 @@
         justify-content: space-between;
         color: #ffffff;
         box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
-    
 }
+
+.sticky-navbar {
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+}
+/* Transparent Dashboard Navbar */
+.transparent-navbar {
+    background: rgba(255, 255, 255, 0.1);
+    /* see-through */
+    backdrop-filter: blur(12px);
+    /* modern glass effect */
+    color: #0f172a;
+    /* dark text for contrast */
+}
+
+.transparent-navbar a {
+    color: #0f172a;
+    /* override links color */
+}
+
+.transparent-navbar .button-primary {
+    background: #2563eb;
+    color: #fff;
+}
+
+.transparent-navbar a:hover {
+color: #2563eb;
+}
+
+
+
+
 
 .logo{
     font-weight: 700;
