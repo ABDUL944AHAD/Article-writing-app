@@ -112,7 +112,7 @@ const AllArticles = () => {
     const deleteArticle = async (id) => {
         try {
             // Call backend delete endpoint
-            await axios.delete(`http://localhost:5000/article/delete/${id}`);
+            await axios.delete(`${API_BASE_URL}/article/delete/${id}`);
 
             // Remove it from frontend state
             setArticles(prev => prev.filter(article => article._id !== id && article.id !== id));
