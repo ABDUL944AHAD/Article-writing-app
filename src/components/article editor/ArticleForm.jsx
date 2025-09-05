@@ -5,6 +5,7 @@ import TiptapEditor from "./Editor";
 import Toast from "../Toaster/Toast";
 import PromptModal from "../promptModel/PromptModal";
 import "./ArticleForm.css";
+import { API_BASE_URL } from "../../config/Config";
 
 const ArticleForm = () => {
     const [articleName, setArticleName] = useState("");
@@ -40,7 +41,7 @@ const ArticleForm = () => {
 
         try {
             await axios.post(
-                "http://localhost:5000/articles/save",
+                `${API_BASE_URL}/articles/save`,
                 { articleName, category, articleContent, images },
                 { headers: { Authorization: `Bearer ${token}` } }
             );

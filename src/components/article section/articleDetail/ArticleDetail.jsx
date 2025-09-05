@@ -3,6 +3,7 @@ import { useParams, Link } from "react-router-dom";
 import axios from "axios";
 import "./ArticleDetail.css";
 import ArticleDetailSkeleton from "../../Skeleton/DetailSkeleton";
+import { API_BASE_URL } from "../../../config/Config";
 function ArticleDetail() {
     const { id } = useParams();
     const [article, setArticle] = useState(null);
@@ -12,7 +13,7 @@ function ArticleDetail() {
         window.scrollTo(0, 0); // instantly jumps to top
         // fetch article by id
         axios
-            .get(`http://localhost:5000/articles/get/${id}`)
+            .get(`${API_BASE_URL}/articles/get/${id}`)
             .then((res) => setArticle(res.data))
             .catch((err) => console.error("Error fetching article:", err));
     }, [id]);
@@ -21,7 +22,7 @@ function ArticleDetail() {
     useEffect(() => {
         if (article?._id) {
             axios
-                .get(`http://localhost:5000/articles/related/${article._id}`)
+                .get(`${API_BASE_URL}/articles/related/${article._id}`)
                 .then((res) => {
                     console.log("Related articles:", res.data);
                     setRelatedArticles(res.data);

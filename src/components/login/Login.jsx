@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import axios from 'axios'
 import './Login.css'
+import { API_BASE_URL } from '../../config/Config'
 
 const Login = () => {
     const [formData, setFormData] = useState({
@@ -53,7 +54,7 @@ const Login = () => {
         }
 
         try {
-            const res = await axios.post("http://localhost:5000/auth/login", formData)
+            const res = await axios.post(`${API_BASE_URL}/auth/login`, formData)
 
             // ✅ Save token and role
             localStorage.setItem("token", res.data.token)
