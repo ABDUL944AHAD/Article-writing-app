@@ -3,6 +3,7 @@ import axios from 'axios';
 import './AllArticles.css';
 import { Link } from 'react-router-dom';
 import SkeletonCard from '../../Skeleton/Skeleton';
+import { API_BASE_URL } from '../../../config/Config';
 
 const sampleArticles = [
     {
@@ -56,7 +57,7 @@ const AllArticles = () => {
         setLoading(true); // Show loading indicator
         try {
             // Request articles from backend
-            const response = await axios.get('http://localhost:5000/articles/get');
+            const response = await axios.get(`${API_BASE_URL}/articles/get`);
             const fetchedArticles = response.data.data; // Extract array from response
 
             // Filter out any incomplete articles
