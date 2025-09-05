@@ -2,6 +2,8 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import SkeletonCard from "../../components/Skeleton/Skeleton";
 import "./AllArticles.css";
+import {API_BASE_URL} from '../../config/Config'
+
 
 const AllArticles = ({ role, token }) => {
     const INITIAL_COUNT = 6;
@@ -16,8 +18,8 @@ const AllArticles = ({ role, token }) => {
             try {
                 const url =
                     role === "admin"
-                        ? "http://localhost:5000/admin/articles"
-                        : "http://localhost:5000/articles/my";
+                        ? `${API_BASE_URL}/admin/articles`
+                        : `${API_BASE_URL}/articles/my`;
 
                 const res = await axios.get(url, {
                     headers: { Authorization: `Bearer ${token}` },
@@ -40,8 +42,8 @@ const AllArticles = ({ role, token }) => {
         try {
             const url =
                 role === "admin"
-                    ? `http://localhost:5000/admin/articles/${id}`
-                    : `http://localhost:5000/articles/delete/${id}`;
+                    ? `${API_BASE_URL}/admin/articles/${id}`
+                    : `${API_BASE_URL}/articles/delete/${id}`;
 
             await axios.delete(url, { headers: { Authorization: `Bearer ${token}` } });
             setArticles((prev) => prev.filter((a) => a._id !== id));

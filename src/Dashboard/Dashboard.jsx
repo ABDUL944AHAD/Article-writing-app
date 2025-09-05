@@ -18,10 +18,9 @@ import {
 } from "chart.js";
 import { Bar, Pie } from "react-chartjs-2";
 import "./Dashboard.css";
+import { API_BASE_URL } from "../config/Config"; 
 
 ChartJS.register(Title, Tooltip, Legend, BarElement, CategoryScale, LinearScale, ArcElement);
-
-const API_BASE = "http://localhost:5000";
 
 const Dashboard = () => {
     const token = localStorage.getItem("token");
@@ -36,7 +35,7 @@ const Dashboard = () => {
     useEffect(() => {
         if (role === "admin") {
             axios
-                .get(`${API_BASE}/admin/dashboard`, {
+                .get(`${API_BASE_URL}/admin/dashboard`, {
                     headers: { Authorization: `Bearer ${token}` },
                 })
                 .then((res) => {
@@ -50,8 +49,8 @@ const Dashboard = () => {
     useEffect(() => {
         const url =
             role === "admin"
-                ? `${API_BASE}/admin/articles`
-                : `${API_BASE}/articles/my`;
+                ? `${API_BASE_URL}/admin/articles`
+                : `${API_BASE_URL}/articles/my`;
         axios
             .get(url, { headers: { Authorization: `Bearer ${token}` } })
             .then((res) => {
@@ -83,7 +82,6 @@ const Dashboard = () => {
         }, {})
     );
 
-    // ChartJS datasets
     const barData = {
         labels: articlesByMonth.map((d) => d.month),
         datasets: [
@@ -108,70 +106,70 @@ const Dashboard = () => {
         ],
     };
 
-    // Convert articles to activity feed
     const activities = articles.map(a => ({
         description: `Article "${a.articleName}" was created in category "${a.category}"`,
         timestamp: a.createdAt,
     }));
 
-    return (<>
-        <Navbar sticky={true} transparent={true} />
-        <Sidebar />
-        <div className="dashboard">
-            <h1>Dashboard ({role})</h1>
+    return (
+        <>
+            <Navbar sticky={true} transparent={true} />
+            <Sidebar />
+            <div className="dashboard">
+                <h1>Dashboard ({role})</h1>
 
-            {/* Stats Row */}
-            {role === "admin" && (
-                <div className="stats-row">
-                    <StatCard title="Total Articles" value={stats.totalArticles} />
-                    <StatCard title="New Articles" value={stats.newArticles} />
-                    <StatCard title="Active Users" value={stats.activeUsers} />
-                </div>
-            )}
-
-            {/* Charts */}
-            <div className="charts">
-                <div className="chart-container">
-                    <h2>Articles per Month</h2>
-                    <div className="chart-wrapper">
-                        <Bar
-                            data={barData}
-                            options={{
-                                responsive: true,
-                                plugins: { legend: { display: false } },
-                                maintainAspectRatio: false
-                            }}
-                        />
+                {role === "admin" && (
+                    <div className="stats-row">
+                        <StatCard title="Total Articles" value={stats.totalArticles} />
+                        <StatCard title="New Articles" value={stats.newArticles} />
+                        <StatCard title="Active Users" value={stats.activeUsers} />
                     </div>
-                </div>
+                )}
 
-                <div className="chart-container">
-                    <h2>Articles by Category</h2>
-                    <div className="chart-wrapper">
-                        <Pie
-                            data={pieData}
-                            options={{
-                                responsive: true,
-                                maintainAspectRatio: false,
-                                plugins: {
-                                    legend: {
-                                        position: "top", // legend above pie
-                                        labels: { boxWidth: 12, padding: 15 }
+                <div className="charts">
+                    <div className="chart-container">
+                        <h2>Articles per Month</h2>
+                        <div className="chart-wrapper">
+                            <Bar
+                                data={barData}
+                                options={{
+                                    responsive: true,
+                                    plugins: { legend: { display: false } },
+                                    maintainAspectRatio: false
+                                }}
+                            />
+                        </div>
+                    </div>
+
+                    <div className="chart-container">
+                        <h2>Articles by Category</h2>
+                        <div className="chart-wrapper">
+                            <Pie
+                                data={pieData}
+                                options={{
+                                    responsive: true,
+                                    maintainAspectRatio: false,
+                                    plugins: {
+                                        legend: {
+                                            position: "top",
+                                            labels: { boxWidth: 12, padding: 15 }
+                                        },
                                     },
-                                },
-                            }}
-                        />
+                                }}
+                            />
+                        </div>
                     </div>
                 </div>
+
+                <div className="dashboard-activities" id="recent-activities">
+                    <RecentActivities activities={activities} limit={6} />
+                </div>
+
+                <div className="dashboard-articles" id="all-articles">
+                    <AllArticles role={role} token={token} />
+                </div>
             </div>
-            <div className="dashboard-activities" id="recent-activities" >
-                <RecentActivities activities={activities} limit={6} />
-            </div>
-            <div className="dashboard-articles" id="all-articles">
-                <AllArticles role={role} token={token} />
-            </div>
-        </div>
-    </>
+        </>
     );
 };
 
